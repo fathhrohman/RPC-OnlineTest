@@ -63,14 +63,17 @@ def lihat_soal():
     cursor.execute(query)
     soal = cursor.fetchall()
     return soal
+
 def get_soal():
     query = "select * from soal_materi"
     cursor.execute(query)
     soal = cursor.fetchall()
     soal_peserta = []
+    idx = [i for i in range(0,100)]
+    urutan = random.sample(idx,20)
     for i in range(0,20):
-        soal_peserta.append(soal[random.randint(0,99)])
-        soal_peserta[i].append("-")
+        soal_peserta.append(soal[urutan[i]])
+    print(soal_peserta)
     return soal_peserta
   
 def waktu_selesai():
@@ -79,17 +82,48 @@ def waktu_selesai():
 def waktu_mulai():
     return time.time()
   
-def upload_nilai(nilai,id_peserta):
-    query = f"update peserta set 'nilai'={nilai} where 'id_peserta'='{id_peserta}'"
+def upload_nilai(nilai,id_peserta,pwd):
+    query = f"update peserta set nilai={nilai} where peserta.id_peserta='{id_peserta}'"
+    #query = f"insert into peserta values ('{id_peserta}','{pwd}',{nilai})"
+    print(query)
     cursor.execute(query)
     db.commit()
     
 def lihat_jawaban(peserta):
     jawaban = []
-    query = "select * from soal_peserta where id_peserta= %s ".%peserta
+    query = "select * from soal_peserta where id_peserta= %s "%peserta
     cursor.execute(query)
     jawaban = cursor.fetchall()
     return jawaban
+
+def get_np(peserta):
+    query = "select nama_peserta from peserta where id_peserta= %s "%peserta
+    cursor.execute(query)
+    nama = cursor.fetchone()
+    return nama[0]
+
+def get_nama_admin(admin):
+    query = "select nama_admin from admin where id_admin= %s "%admin
+    cursor.execute(query)
+    nama = cursor.fetchone()
+    return nama[0]  
+
+def upload_soal_peserta(soal,id_peserta,jawab):
+    for i in range(len(soal)):
+        id_soal_peserta = soal[i][0]+"_"+id_peserta
+        query = f"insert into soal_peserta values ('{id_soal_peserta}','{jawab[i]}','{id_peserta}','{soal[i][0]}')"
+        cursor.execute(query)
+        db.commit()
+
+def cek_peserta(id_peserta):
+    query = "select * from soal_peserta"
+    cursor.execute(query)
+    kode_peserta = cursor.fetchall()
+    for i in kode_peserta:
+        if i[2] == id_peserta :
+            return True
+    return False
+
 
 
 server.register_function(login_admin, 'login_admin')
@@ -102,5 +136,8 @@ server.register_function(waktu_selesai, 'waktu_selesai')
 server.register_function(waktu_mulai, 'waktu_mulai')
 server.register_function(upload_nilai, 'upload_nilai')
 server.register_function(lihat_jawaban, 'lihat_jawaban')
+server.register_function(upload_soal_peserta, 'upload_soal_peserta')
+server.register_function(cek_peserta, 'cek_peserta')
+server.register_function(get_np, 'get_np')
 
 server.serve_forever()
