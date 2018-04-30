@@ -98,7 +98,7 @@ def lihat_nilai(id):
     query = "select * from peserta where id_peserta= %s"%id
     cursor.execute(query)
     nilai = cursor.fetchone()
-    return nilai[0]
+    return nilai[2]
 
 def upload_soal_peserta(soal,id_peserta):
     for i in range(len(soal)):
@@ -116,7 +116,7 @@ def get_np(peserta):
     query = "select nama_peserta from peserta where id_peserta= %s "%peserta
     cursor.execute(query)
     tampung = cursor.fetchone()
-    return tampung
+    return tampung[0]
 
 def get_ad(admin):
     query = "select nama_admin from admin where id_admin= %s "%admin
