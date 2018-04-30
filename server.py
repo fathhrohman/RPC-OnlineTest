@@ -67,12 +67,13 @@ def get_soal():
     query = "select * from soal_materi"
     cursor.execute(query)
     soal = cursor.fetchall()
-    print('soal',soal)
+    #print('soal',soal)
     soal_peserta = []
+    idx = [i for i in range(0,100)]
+    urutan = random.sample(idx,20)
     for i in range(0,20):
-        soal_peserta.append(soal[random.randint(0,99)])
-        soal_peserta[i].append("-")
-    print('soal peserta0',soal_peserta[0])    
+        soal_peserta.append(soal[urutan[i]])
+    #print(soal_peserta)
     return soal_peserta
   
 def waktu_selesai():
@@ -81,8 +82,10 @@ def waktu_selesai():
 def waktu_mulai():
     return time.time()
   
-def upload_nilai(nilai,id_peserta):
-    query = f"update peserta set 'nilai'={nilai} where 'id_peserta'='{id_peserta}'"
+def upload_nilai(nilai,id_peserta,pwd):
+    query = f"update peserta set nilai={nilai} where peserta.id_peserta='{id_peserta}'"
+    #query = f"insert into peserta values ('{id_peserta}','{pwd}',{nilai})"
+    print(query)
     cursor.execute(query)
     db.commit()
     
@@ -91,6 +94,9 @@ def lihat_jawaban(peserta):
     query = "select * from soal_peserta where id_peserta= %s "%peserta
     cursor.execute(query)
     jawaban = cursor.fetchall()
+    query = "select * from soal_materi"
+    cursor.execute(query)
+    # soal = 
     return jawaban
 
 
@@ -100,11 +106,12 @@ def lihat_nilai(id):
     nilai = cursor.fetchone()
     return nilai[2]
 
-def upload_soal_peserta(soal,id_peserta):
+def upload_soal_peserta(soal,id_peserta,jawab):
     for i in range(len(soal)):
-        query = f"insert into soal_peserta values ('{soal[i][0]}_{id_peserta}','{soal[i][7]}','{id_peserta}','{soal[i][0]}')"
+        id_soal_peserta = soal[i][0]+"_"+id_peserta
+        query = f"insert into soal_peserta values ('{id_soal_peserta}','{jawab[i]}','{id_peserta}','{soal[i][0]}')"
         cursor.execute(query)
-        db.commit()
+    db.commit()
 
 def cek_peserta(id_peserta):
     query = f"select * from soal_peserta where soal_peserta.id_peserta='{id_peserta}'"
