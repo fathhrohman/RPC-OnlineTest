@@ -94,9 +94,6 @@ def lihat_jawaban(peserta):
     query = "select * from soal_peserta where id_peserta= %s "%peserta
     cursor.execute(query)
     jawaban = cursor.fetchall()
-    query = "select * from soal_materi"
-    cursor.execute(query)
-    # soal = 
     return jawaban
 
 

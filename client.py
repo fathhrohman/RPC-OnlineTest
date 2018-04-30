@@ -28,8 +28,8 @@ def menu_user():
     return eval(input("Masukkan pilihan : "))
 
 while True:
-    # pilihan = menu_awal()
-    if menu_awal() == 1 :
+    pilihan = menu_awal()
+    if pilihan == 1 :
         os.system('cls')
         usr_user = input('Username :')
         usr_pass = getpass.getpass('Password :')
@@ -131,7 +131,7 @@ while True:
             print('Salah password/username')
             time.sleep(0.5)
             os.system('cls')
-    if menu_awal() == 2:
+    if pilihan == 2:
         os.system("cls")
         print("Registrasi")
         id = input("Masukkan id = ")
