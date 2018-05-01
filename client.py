@@ -105,14 +105,28 @@ while True:
                 elif pil == 3:
                     os.system("cls")
                     jawaban = server.lihat_jawaban(usr_user)
+                    soal_peserta = server.lihat_soal()
+                    soal = []
+                    for i in soal_peserta:
+                        soal.append([i[0],i[1],i[2]])
                     if not jawaban :
                         print(server.get_np(usr_user),", anda belum mulai kuis" )
                         time.sleep(2)
                     else :
                         print("---Lihat Jawaban---")
-                        
+                        show = []
+                        kode_soal = []
+                        kc = []
                         for i in jawaban :
+                            kode_soal.append(i[3])
+                            kc.append(i[1])
+                        for i in range(len(kode_soal)):
+                            for j in soal:
+                                if kode_soal[i] == j[0]:
+                                    show.append([kode_soal[i],j[1],j[2],kc[i]])
+                        for i in show :
                             print(i)
+                        input()
                         time.sleep(3)
                         # t = PrettyTable(['Soal', 'Jawaban Anda', 'Kunci Jawaban'])
                         # for isi in jawaban:
@@ -120,7 +134,7 @@ while True:
                         # print(t)
                         # print('Enter to lanjutkan')
                         # input()
-                elif pil == 4:
+                elif pil == 0:
                     # valid_user == False
                     print("Log Out Successful")
                     time.sleep(0.5)
@@ -139,6 +153,12 @@ while True:
         if server.daftar(id,password):
             print("berhasil registrasi")
             # time.sleep(2)
+    if pilihan == 0 :
+        print("Exit")
+        time.sleep(2)
+        os.system("cls")
+
+        break
         
 
 
